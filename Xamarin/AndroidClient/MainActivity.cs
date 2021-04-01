@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using LitJson;
 
 namespace AndroidApp
 {
@@ -67,10 +69,10 @@ namespace AndroidApp
                 try
                 {
                     _connection = new HubConnectionBuilder()
-                        .WithUrl(_serverUrlText.Text)
+                        .WithUrl("https://visualartfamouspaintingsignalrappserver.azurewebsites.net/RemoteControlHub", options => { options.SkipNegotiation = true; options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets; })
                         .ConfigureLogging(logging => { logging.AddDebug(); })
                         .Build();
-
+                    
                     _connection.On<string>("Send", (message) =>
                     {
                         AppendMessage(message);
@@ -84,12 +86,15 @@ namespace AndroidApp
                     UpdateState(ViewState.Disconnected);
                 }
 
+                
                 UpdateState(ViewState.Connected);
             }
         }
 
         private async void SendButton_Click(object sender, EventArgs e)
         {
+            Console.WriteLine("허브 상태 : " + _connection.State.ToString());
+            Console.WriteLine("보내기 버튼 클릭");
             if (_state != ViewState.Connected)
             {
                 Toast.MakeText(this, "Must be Connected to Send!", ToastLength.Short).Show();
@@ -98,11 +103,13 @@ namespace AndroidApp
 
             try
             {
-                await _connection.SendAsync("Send", _messageText.Text);
+                Console.WriteLine("메시지 보내기");
+                await _connection.SendAsync("SendSelectFamousPicture", "ck2", "3", "docent_026");
                 _messageText.Text = "";
             }
             catch (Exception ex)
             {
+                Console.WriteLine("메시지 오류");
                 AppendMessage($"An error occurred while sending: {ex}");
             }
         }

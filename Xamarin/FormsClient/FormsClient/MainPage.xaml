@@ -6,11 +6,11 @@
 
     <StackLayout Margin="8">
         <!-- Place new controls here -->
-        <Entry x:Name="ServerUrlEntry" Placeholder="Server URL" />
+        <Entry x:Name="ServerUrlEntry" Placeholder="Server URL" Text="https://visualartfamouspaintingsignalrappserver.azurewebsites.net/"  />
         <Button x:Name="ConnectDisconnectButton" Text="Connect" Clicked="ConnectDisconnectButton_Clicked" />
         <ListView x:Name="MessagesListView" VerticalOptions="FillAndExpand" />
         <StackLayout Orientation="Horizontal">
-            <Entry x:Name="MessageEntry" Placeholder="Message" HorizontalOptions="FillAndExpand" />
+            <Entry x:Name="MessageEntry" Placeholder="Message" HorizontalOptions="FillAndExpand"/>
             <Button x:Name="SendButton" Text="Send" Clicked="SendButton_Clicked" />
         </StackLayout>
     </StackLayout>

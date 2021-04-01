@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.AspNetCore.SignalR.Client;
 using Xamarin.Forms;
+using Microsoft.Extensions.DependencyInjection;
+using LitJson;
 
 namespace FormsClient
 {
@@ -17,8 +19,8 @@ namespace FormsClient
 		{
 			InitializeComponent();
 		    MessagesListView.ItemsSource = _messages;
-
-		}
+            ServerUrlEntry.Text = "https://visualartfamouspaintingsignalrappserver.azurewebsites.net/";
+        }
 
         private async void ConnectDisconnectButton_Clicked(object sender, EventArgs e)
         {
@@ -46,7 +48,7 @@ namespace FormsClient
                 try
                 {
                     _connection = new HubConnectionBuilder()
-                        .WithUrl(ServerUrlEntry.Text)
+                        .WithUrl("https://visualartfamouspaintingsignalrappserver.azurewebsites.net/")
                         .Build();
 
                     _connection.On<string>("Send", (message) =>
@@ -76,8 +78,9 @@ namespace FormsClient
             }
 
             try
-            {
-                await _connection.SendAsync("Send", MessageEntry.Text);
+            {               
+                await _connection.SendAsync("SendSelectFamousPicture", "ck2", "3", "docent_026");
+                //await _connection.SendAsync("Send", MessageEntry.Text);
                 MessageEntry.Text = "";
             }
             catch (Exception ex)
